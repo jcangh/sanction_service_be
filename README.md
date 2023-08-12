@@ -32,7 +32,7 @@ Here are the possible states for a sanction:
 
 ## TECH STACK
 
-- Java 11
+- Java 17
 - Spring boot 3
 - Mysql
 - State Machine 3.2.0

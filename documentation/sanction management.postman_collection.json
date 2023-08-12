@@ -1,0 +1,66 @@
+{
+	"info": {
+		"_postman_id": "98c03b07-76d6-41ba-9340-6d7a123a097f",
+		"name": "sanction management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21003714"
+	},
+	"item": [
+		{
+			"name": "CREATE SANCTION",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"drug directive\",\r\n    \"type\": \"LEGAL\",\r\n    \"origin\": {\r\n        \"name\": \"US GOVERMENT\",\r\n        \"type\": \"INSTITUTION\"\r\n    },\r\n    \"destination\":{\r\n       \"name\": \"Colombia\",\r\n       \"type\": \"COUNTRY\" \r\n    }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sanctions",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sanctions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ACTIVATE SANCTION",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requiredApprovals\": 2,\r\n    \"requiredRejections\": 1,\r\n    \"note\": \"The first\",\r\n    \"actionBy\": \"Juan\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sanctions/3ac926bb-2ddf-4dbe-8aa7-b58ec21506e5/activate",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sanctions",
+						"3ac926bb-2ddf-4dbe-8aa7-b58ec21506e5",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

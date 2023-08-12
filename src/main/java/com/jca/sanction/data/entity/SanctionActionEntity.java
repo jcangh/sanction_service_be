@@ -1,5 +1,6 @@
 package com.jca.sanction.data.entity;
 
+import com.jca.sanction.enums.SanctionEvent;
 import com.jca.sanction.enums.SanctionState;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,6 +30,10 @@ public class SanctionActionEntity {
     @Enumerated(EnumType.STRING)
     private SanctionState newState;
 
+    @Enumerated(EnumType.STRING)
+    private SanctionEvent event;
+
+    private String note;
     private String approvedBy;
 
     private Instant createdOn;

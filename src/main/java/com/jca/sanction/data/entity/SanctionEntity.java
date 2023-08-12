@@ -3,9 +3,11 @@ package com.jca.sanction.data.entity;
 import com.jca.sanction.converter.StringMapConverter;
 import com.jca.sanction.enums.SanctionState;
 import com.jca.sanction.enums.SanctionType;
+import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.Type;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -39,13 +41,15 @@ public class SanctionEntity {
     @Enumerated(EnumType.STRING)
     private SanctionState state;
 
-    @Convert(converter = StringMapConverter.class)
-    private Map<String, String> additionalValues;
+    @Type(JsonType.class)
+    @Column(columnDefinition = "json")
+    private Map<String, Object> additionalValues;
 
     @OneToMany(
             cascade = CascadeType.ALL,
-            orphanRemoval = true
+            fetch = FetchType.EAGER
     )
+    @JoinColumn(name = "sanction_id")
     private List<SanctionActionEntity> actions = new ArrayList<>();
 
     private Instant createdOn;

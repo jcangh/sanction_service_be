@@ -17,21 +17,11 @@ import org.springframework.statemachine.listener.StateMachineListenerAdapter;
 
 import java.util.EnumSet;
 
+import static com.jca.sanction.util.SanctionConstants.*;
+
 @Configuration
 @EnableStateMachineFactory
 public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter<SanctionState, SanctionEvent> {
-
-    public static final String MESSAGE_HEADER_REQUIRED_APPROVALS = "requiredApprovals";
-
-    public static final String MESSAGE_HEADER_REQUIRED_REJECTIONS = "requiredRejections";
-
-    public static final String MESSAGE_HEADER_APPROVALS_COUNT = "approvalsCount";
-
-    public static final String MESSAGE_HEADER_REJECTIONS_COUNT = "rejectionsCount";
-
-    public static final int SANCTION_DEFAULT_REQUIRED_APPROVALS = 2;
-
-    public static final int SANCTION_DEFAULT_REQUIRED_REJECTIONS = 1;
 
 
     @Override
@@ -43,9 +33,9 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
                 .target(SanctionState.ACTIVE_PENDING);
         transitions
                 .withExternal()
-                .guard(checkApprovalsGuard())
                 .source(SanctionState.ACTIVE_PENDING)
                 .event(SanctionEvent.APPROVE)
+                .guard(checkApprovalsGuard())
                 .target(SanctionState.ACTIVE);
     }
 

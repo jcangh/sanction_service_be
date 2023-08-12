@@ -34,8 +34,10 @@ create table sanction_action (
   -- -------------------------------------------------
   previous_state                 varchar(25),
   new_state                      varchar(25),
+  event                          varchar(25),
+  note                           varchar(100),
   approved_by                    varchar(50),
-  sanction_id                    varchar(26),
+  sanction_id                    varchar(36),
   -- -------------------------------------------------
   created_on                 	 timestamp,
   updated_on                 	 timestamp,

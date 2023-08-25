@@ -1,5 +1,6 @@
 package com.jca.sanction.controller;
 
+import com.jca.sanction.dto.ActionRequest;
 import com.jca.sanction.dto.SanctionAction;
 import com.jca.sanction.dto.SanctionEventAction;
 import com.jca.sanction.service.ActionService;
@@ -23,5 +24,11 @@ public class ActionController {
     public ResponseEntity<List<SanctionAction>> activateSanction(@PathVariable(name = "sanctionId")String sanctionId,
                                                                  @RequestBody SanctionEventAction sanctionEventAction){
         return ResponseEntity.ok(actionService.activateSanction(sanctionId, sanctionEventAction));
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/sanctions/{sanctionId}/approve/{actionId}")
+    public ResponseEntity<List<SanctionAction>> approveSanction(@PathVariable(name = "sanctionId")String sanctionId,
+                                                                @RequestBody ActionRequest actionRequest, @PathVariable(name = "actionId") String actionId) {
+        return ResponseEntity.ok(actionService.approveSanction(sanctionId,actionRequest.getNote(), actionId));
     }
 }

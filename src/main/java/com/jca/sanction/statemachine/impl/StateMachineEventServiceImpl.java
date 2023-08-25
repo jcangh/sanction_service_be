@@ -39,6 +39,16 @@ public class StateMachineEventServiceImpl implements StateMachineEventService {
         sendEventToStateMachine(message, sanction.getState());
     }
 
+    @Override
+    public void approveSanctionEvent(String sanctionId, SanctionEventAction action, Integer approvalsCount) {
+        SanctionEntity sanction = service.getById(sanctionId);
+        var message = StateMachineMessageBuilder.withSanctionEvent(SanctionEvent.APPROVE)
+                .withStandardHeaders(sanction.getId())
+                .withActionHeaders(action)
+                .withCommandHeaders(approvalsCount, 0, action.note(), action.actionBy()).build();
+        sendEventToStateMachine(message, sanction.getState());
+    }
+
     @SneakyThrows
     public void sendEventToStateMachine(Message<SanctionEvent> message, SanctionState sanctionState) {
         final var sm = buildSmWithState(sanctionState);

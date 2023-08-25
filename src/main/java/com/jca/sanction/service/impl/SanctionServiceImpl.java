@@ -20,6 +20,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+import static com.jca.sanction.util.SanctionConstants.REQUIRED_APPROVALS;
+import static com.jca.sanction.util.SanctionConstants.REQUIRED_REJECTIONS;
+
 @Slf4j
 @AllArgsConstructor
 @Service
@@ -78,8 +81,11 @@ public class SanctionServiceImpl implements SanctionService {
         if (optionalEntity.isPresent()){
             SanctionEntity entity = optionalEntity.get();
 
-            entity.getAdditionalValues().put("requiredApprovals", action.requiredApprovals());
-            entity.getAdditionalValues().put("requiredRejections", action.requiredRejections());
+            if (entity.getAdditionalValues() == null){
+                entity.setAdditionalValues(new HashMap<>());
+            }
+            entity.getAdditionalValues().put(REQUIRED_APPROVALS, action.requiredApprovals());
+            entity.getAdditionalValues().put(REQUIRED_REJECTIONS, action.requiredRejections());
 
             SanctionActionEntity actionEntity = new SanctionActionEntity();
             actionEntity.setPreviousState(entity.getState());

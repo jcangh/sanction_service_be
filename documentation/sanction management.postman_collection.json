@@ -48,15 +48,44 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:8080/sanctions/3ac926bb-2ddf-4dbe-8aa7-b58ec21506e5/activate",
+					"raw": "localhost:8080/sanctions/{{sanctionId}}/activate",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
 						"sanctions",
-						"3ac926bb-2ddf-4dbe-8aa7-b58ec21506e5",
+						"{{sanctionId}}",
 						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "APPROVE SANCTION",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"note\": \"second approval\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sanctions/{{sanctionId}}/approve",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sanctions",
+						"{{sanctionId}}",
+						"approve"
 					]
 				}
 			},

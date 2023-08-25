@@ -49,6 +49,7 @@ public class SanctionEntity {
             fetch = FetchType.EAGER
     )
     @JoinColumn(name = "sanction_id")
+    @OrderBy(value = "createdBy desc")
     private List<SanctionActionEntity> actions = new ArrayList<>();
 
     private Instant createdOn;

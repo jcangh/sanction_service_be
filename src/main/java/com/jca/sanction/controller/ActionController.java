@@ -26,9 +26,9 @@ public class ActionController {
         return ResponseEntity.ok(actionService.activateSanction(sanctionId, sanctionEventAction));
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/sanctions/{sanctionId}/approve/{actionId}")
+    @RequestMapping(method = RequestMethod.POST, value = "/sanctions/{sanctionId}/approve")
     public ResponseEntity<List<SanctionAction>> approveSanction(@PathVariable(name = "sanctionId")String sanctionId,
-                                                                @RequestBody ActionRequest actionRequest, @PathVariable(name = "actionId") String actionId) {
-        return ResponseEntity.ok(actionService.approveSanction(sanctionId,actionRequest.getNote(), actionId));
+                                                                @RequestBody ActionRequest actionRequest) {
+        return ResponseEntity.ok(actionService.approveSanction(sanctionId,actionRequest.getNote(), "approvedAdmin"));
     }
 }

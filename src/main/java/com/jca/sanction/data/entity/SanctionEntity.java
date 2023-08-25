@@ -1,6 +1,5 @@
 package com.jca.sanction.data.entity;
 
-import com.jca.sanction.converter.StringMapConverter;
 import com.jca.sanction.enums.SanctionState;
 import com.jca.sanction.enums.SanctionType;
 import io.hypersistence.utils.hibernate.type.json.JsonType;

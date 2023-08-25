@@ -25,4 +25,8 @@ public final class SanctionConstants {
     public static final String MESSAGE_HEADER_ACTION_STATE_BY = "actionStateBy";
 
     public static final String MESSAGE_HEADER_UPDATED_SANCTION = "updatedSanction";
+
+    public static final String REQUIRED_APPROVALS = "requiredApprovals";
+
+    public static final String REQUIRED_REJECTIONS = "requiredRejections";
 }

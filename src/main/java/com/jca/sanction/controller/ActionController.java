@@ -31,4 +31,10 @@ public class ActionController {
                                                                 @RequestBody ActionRequest actionRequest) {
         return ResponseEntity.ok(actionService.approveSanction(sanctionId,actionRequest.getNote(), "approvedAdmin"));
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/sanctions/{sanctionId}/reject")
+    public ResponseEntity<List<SanctionAction>> rejectSanction(@PathVariable(name = "sanctionId")String sanctionId,
+                                                                @RequestBody ActionRequest actionRequest) {
+        return ResponseEntity.ok(actionService.rejectSanction(sanctionId,actionRequest.getNote(), "approvedAdmin"));
+    }
 }

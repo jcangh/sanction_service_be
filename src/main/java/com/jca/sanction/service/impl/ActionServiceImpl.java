@@ -49,4 +49,20 @@ public class ActionServiceImpl implements ActionService {
         (int) approvalsCount);
         return sanctionService.getById(sanctionId).getActions().stream().map(sanctionMapper::toSanctionAction).toList();
     }
+
+    @Override
+    public List<SanctionAction> rejectSanction(String sanctionId, String note, String approvedBy) {
+        var entity = sanctionService.getById(sanctionId);
+        var rejectionsCount = entity.getActions().stream()
+                .filter( action -> SanctionEvent.REJECT.equals(action.getEvent())).count() + 1;
+        eventService.rejectSanctionEvent(
+                entity.getId(),
+                new SanctionEventAction(
+                        (Integer) entity.getAdditionalValues().get(REQUIRED_APPROVALS),
+                        (Integer) entity.getAdditionalValues().get(REQUIRED_REJECTIONS),
+                        note,
+                        approvedBy),
+                (int) rejectionsCount);
+        return sanctionService.getById(sanctionId).getActions().stream().map(sanctionMapper::toSanctionAction).toList();
+    }
 }

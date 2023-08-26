@@ -6,6 +6,8 @@ import com.jca.sanction.dto.SanctionEventAction;
 import com.jca.sanction.enums.SanctionEvent;
 import com.jca.sanction.enums.SanctionState;
 
+import java.util.Map;
+
 public interface SanctionService {
 
     Sanction create(Sanction sanction);
@@ -15,4 +17,8 @@ public interface SanctionService {
     void updateSanctionState(String sanctionId, SanctionState state);
 
     void addSanctionAction(String sanctionId, SanctionEventAction action, SanctionEvent event, SanctionState newState);
+
+    Map<String, Object> getAdditionalValues(String sanctionId);
+
+    Integer getEventCount(SanctionEvent sanctionEvent);
 }

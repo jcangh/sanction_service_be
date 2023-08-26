@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.jca.sanction.util.SanctionConstants.REQUIRED_APPROVALS;
@@ -96,5 +97,17 @@ public class SanctionServiceImpl implements SanctionService {
             entity.getActions().add(actionEntity);
             sanctionDao.save(entity);
         }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Map<String, Object> getAdditionalValues(String sanctionId) {
+        return sanctionDao.getAdditionalValues(sanctionId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Integer getEventCount(SanctionEvent sanctionEvent) {
+        return sanctionDao.countSanctionEvents(sanctionEvent);
     }
 }

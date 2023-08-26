@@ -13,9 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 
-import static com.jca.sanction.util.SanctionConstants.REQUIRED_APPROVALS;
-import static com.jca.sanction.util.SanctionConstants.REQUIRED_REJECTIONS;
+import static com.jca.sanction.util.SanctionConstants.*;
 
 @Slf4j
 @AllArgsConstructor
@@ -34,35 +34,43 @@ public class ActionServiceImpl implements ActionService {
         return entity.getActions().stream().map(sanctionMapper::toSanctionAction).toList();
     }
 
-    @Override
-    public List<SanctionAction> approveSanction(String sanctionId, String note, String approvedBy) {
-        var entity = sanctionService.getById(sanctionId);
-        var approvalsCount = entity.getActions().stream()
-                .filter( action -> SanctionEvent.APPROVE.equals(action.getEvent())).count() + 1;
-    eventService.approveSanctionEvent(
-        entity.getId(),
-        new SanctionEventAction(
-            (Integer) entity.getAdditionalValues().get(REQUIRED_APPROVALS),
-            (Integer) entity.getAdditionalValues().get(REQUIRED_REJECTIONS),
-            note,
-            approvedBy),
-        (int) approvalsCount);
-        return sanctionService.getById(sanctionId).getActions().stream().map(sanctionMapper::toSanctionAction).toList();
-    }
+  @Override
+  public List<SanctionAction> approveSanction(String sanctionId, String note, String approvedBy) {
+    return processEvent(sanctionId, SanctionEvent.APPROVE, note, approvedBy);
+  }
 
     @Override
     public List<SanctionAction> rejectSanction(String sanctionId, String note, String approvedBy) {
-        var entity = sanctionService.getById(sanctionId);
-        var rejectionsCount = entity.getActions().stream()
-                .filter( action -> SanctionEvent.REJECT.equals(action.getEvent())).count() + 1;
-        eventService.rejectSanctionEvent(
-                entity.getId(),
-                new SanctionEventAction(
-                        (Integer) entity.getAdditionalValues().get(REQUIRED_APPROVALS),
-                        (Integer) entity.getAdditionalValues().get(REQUIRED_REJECTIONS),
-                        note,
-                        approvedBy),
-                (int) rejectionsCount);
-        return sanctionService.getById(sanctionId).getActions().stream().map(sanctionMapper::toSanctionAction).toList();
+        return processEvent(sanctionId, SanctionEvent.REJECT, note, approvedBy);
     }
+
+  private List<SanctionAction> processEvent(
+      String sanctionId, SanctionEvent sanctionEvent, String note, String approvedBy) {
+    Map<String, Object> additionalValues = sanctionService.getAdditionalValues(sanctionId);
+    int requiredApprovals =
+        additionalValues != null
+            ? (int) additionalValues.get(REQUIRED_APPROVALS)
+            : SANCTION_DEFAULT_REQUIRED_APPROVALS;
+    int requiredRejections =
+        additionalValues != null
+            ? (int) additionalValues.get(REQUIRED_REJECTIONS)
+            : SANCTION_DEFAULT_REQUIRED_REJECTIONS;
+
+    var approvalsCount = sanctionService.getEventCount(sanctionEvent) + 1;
+
+    if (SanctionEvent.APPROVE == sanctionEvent) {
+      eventService.approveSanctionEvent(
+          sanctionId,
+          new SanctionEventAction(requiredApprovals, requiredRejections, note, approvedBy),
+          approvalsCount);
+    } else if (SanctionEvent.REJECT == sanctionEvent) {
+      eventService.rejectSanctionEvent(
+          sanctionId,
+          new SanctionEventAction(requiredApprovals, requiredRejections, note, approvedBy),
+          approvalsCount);
+    }
+    return sanctionService.getById(sanctionId).getActions().stream()
+        .map(sanctionMapper::toSanctionAction)
+        .toList();
+  }
 }

@@ -8,6 +8,19 @@
 	"item": [
 		{
 			"name": "CREATE SANCTION",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"let responseData = pm.response.json();\r",
+							"console.log(responseData);\r",
+							"pm.environment.set(\"sanctionId\", responseData.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -40,7 +53,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"requiredApprovals\": 2,\r\n    \"requiredRejections\": 1,\r\n    \"note\": \"The first\",\r\n    \"actionBy\": \"Juan\"\r\n}",
+					"raw": "{\r\n    \"requiredApprovals\": 2,\r\n    \"requiredRejections\": 2,\r\n    \"note\": \"Active request sent\",\r\n    \"actionBy\": \"Juan\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -86,6 +99,35 @@
 						"sanctions",
 						"{{sanctionId}}",
 						"approve"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "REJECT SANCTION",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"note\": \"this does not match with basic conditions to approve - 2\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/sanctions/{{sanctionId}}/reject",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"sanctions",
+						"{{sanctionId}}",
+						"reject"
 					]
 				}
 			},

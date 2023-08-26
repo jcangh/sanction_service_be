@@ -37,6 +37,12 @@ public class StateMachineConfiguration extends EnumStateMachineConfigurerAdapter
                 .event(SanctionEvent.APPROVE)
                 .guard(checkApprovalsGuard())
                 .target(SanctionState.ACTIVE);
+        transitions
+                .withExternal()
+                .source(SanctionState.ACTIVE_PENDING)
+                .event(SanctionEvent.REJECT)
+                .guard(checkRejectionsGuard())
+                .target(SanctionState.REJECTED);
     }
 
     @Override

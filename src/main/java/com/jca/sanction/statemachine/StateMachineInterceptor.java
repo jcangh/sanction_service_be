@@ -27,7 +27,7 @@ public class StateMachineInterceptor extends StateMachineInterceptorAdapter<Sanc
       List.of(SanctionEvent.APPROVE, SanctionEvent.INACTIVE, SanctionEvent.REJECT);
 
     private static final List<SanctionEvent> SANCTION_ACTION_EVENTS =
-            List.of(SanctionEvent.ACTIVATE, SanctionEvent.CANCEL, SanctionEvent.UPDATE, SanctionEvent.APPROVE);
+            List.of(SanctionEvent.ACTIVATE, SanctionEvent.CANCEL, SanctionEvent.UPDATE);
     private final SanctionService sanctionService;
 
     @Override
@@ -55,7 +55,7 @@ public class StateMachineInterceptor extends StateMachineInterceptorAdapter<Sanc
       StateContext<SanctionState, SanctionEvent> stateContext) {
     var messageHeaders = stateContext.getMessage().getHeaders();
     if (SANCTION_COMMAND_EVENTS.contains(stateContext.getEvent())) {
-      addSanctionAction(messageHeaders, stateContext.getEvent(), null);
+      addSanctionAction(messageHeaders, stateContext.getEvent(), stateContext.getTransition().getTarget().getId());
     }
     return stateContext;
   }
